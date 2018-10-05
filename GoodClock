@@ -1,0 +1,80 @@
+/**
+* @author Elliot Gordon
+*/
+
+public class Ex3{
+
+	/**
+	* Main method where the printAngle method is called.
+	* @param args unused 
+	*/
+
+	public static void main(String[] args){
+// Part a
+	printAngle(9,00,00);
+	printAngle(03,00,00);
+	printAngle(18,00,00);
+	printAngle(01,00,00);
+	printAngle(02,30,00);
+	printAngle(04,41,00);
+// Part b
+	printAngle(00,00,20);
+	printAngle(13,05,27.272727272727);
+	}
+
+	/**
+	* This method receives the angles of the hour and minute hands, and determines which is in front. 
+	* Let the angle of the hour hand from 12:00 be x, and that of the minute hand be y.
+	* If the minute hand comes before the hour hand (i.e. in 11:10) then the formula for the counterclockwise angle is: |y-x|
+	* If the hour hand is first (i.e. in 01:45) then it is: 360-(y-x)
+	* The flag variable differentiates between the conditions by the sign of their result. Results 0< are converted to a value of 1, where all others convert to 0. The flag variable is then multiplied by 360, which allows the one formula to adapt to whichever clock hand position is presented without the need for a conditional statement or loop. 
+	* @param hours Angle of the hour hand from 12:00
+	* @param minutes Angle of the minute hand from 12:00
+	* @return The counterclockwise angle from the hour hand to the minute hand
+	*/
+
+	public static double computeAngle(double hours, double minutes){
+		double flag = ((((((2*(minutes - hours))-1) / Math.abs(((2*(minutes - hours))-1)))+1)*1.5)%2);
+		return (flag*360) - (minutes - hours);		
+	} 
+
+	/**
+	* This method produces the angle of the minute hand from 12:00, as well as converting minute inputs to be between 0-59.
+	* @param minutes Current value of minute hand
+	* @param seconds Current value of seconds hand
+	* @return  Angle of the minute hand from 12:00
+	*/
+	public static double minConvert(double minutes, double seconds){
+		return (double) Math.round(((minutes%60)*6) + seconds*0.1); 		
+	}
+
+	/**
+	* This method normalises inputs of seconds such that all values are between 0 and 59.
+	* @param seconds Current value of seconds hand
+	* @return Normalised seconds value
+	*/
+	public static double secConvert(double seconds){
+		return (seconds%60);	
+	}
+	
+	/**
+	*Method converts all hour inputs to a 12 hour format which can be used to determine the angle of the hour hand from 12:00.
+	* @param hours Current value of hour hand
+	* @param minutes Current value of minute hand
+	* @param seconds Current value of seconds hand
+	* @return Angle of the hour hand from 12:00
+	*/
+
+	public static double hourConvert(double hours, double minutes, double seconds){
+		double var = hours%12;
+		return (double) Math.round((0.5*((var*60) + minutes)) + seconds*0.0008333);
+	} 
+
+	/**
+	*This method calls the computeAngle, hourConvert and minConvert methods to display the current counterclockwise angle from the hour to the minute hand. This method is called from the main method.
+	*/
+
+	public static void printAngle(double hours, double minutes, double seconds){
+		System.out.println("At " + (int)hours + ":" + (int)minutes + ":" + (int)seconds + " the counterclockwise angle from the hour hand to the minute hand is " +  computeAngle(hourConvert(hours,minutes, seconds), minConvert(minutes,seconds)) + '\u00b0' + "."); 
+	}
+}
